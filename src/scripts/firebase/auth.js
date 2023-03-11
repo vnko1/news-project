@@ -1,6 +1,11 @@
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { app } from './firebase';
-// import { user } from '../common/fetchUser';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+import { app } from './firebaseApi';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { spinner } from '../common/libraries';
 
 const auth = getAuth(app);
 const regForm = document.querySelector('.reg-form');
@@ -9,24 +14,29 @@ regForm.addEventListener('submit', onHandleSubmit);
 
 function onHandleSubmit(e) {
   e.preventDefault();
-
-  const { email, password } = e.target.elements;
-  creatAccount(email.value, password.value);
+  spinner.spin(document.body);
+  const { name, email, password } = e.target.elements;
+  creatAccount(name.value, email.value, password.value);
 }
 
-function creatAccount(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
-      // Signed in
+async function creatAccount(name, email, password) {
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    const params = { displayName: name };
+    await updateProfile(auth.currentUser, params);
+    spinner.stop();
 
-      const userData = userCredential.user;
-      regForm.reset();
-    })
-    .catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
-      // ..
-    });
+    window.location.href = './index.html';
+  } catch (error) {
+    const errorMessage = error.message;
+    spinner.stop();
+    Report.failure(errorMessage);
+
+    // ..
+  }
+
+  // .then(userCredential => {
+  //   const userData = userCredential.user;
+  //   regForm.reset();
+  // })
 }

@@ -243,10 +243,14 @@
   display: flex;
   position: relative;
 
-  &:focus,
-  &:hover {
+  &:not([disabled]):focus,
+  &:not([disabled]):hover {
     color: #fff;
     background: #4440f6;
     box-shadow: 0 4px 4px #00000040;
+  }
+  &:disabled {
+    background-color: grey;
+    color: #fff;
   }
 }
