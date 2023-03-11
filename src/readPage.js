@@ -1,8 +1,8 @@
-import './scripts/current';
-import './scripts/mobileMenu';
-import './scripts/authMenu';
-import './scripts/newsCardFromStorage';
-import './scripts/read';
-import './scripts/themeRead';
-import './scripts/themeReadMobile';
-import './scripts/searchNewsFromReadStorage';
+import './scripts/common/current';
+import './scripts/common/mobileMenu';
+import './scripts/common/authMenu';
+import './scripts/common/newsCardFromStorage';
+import './scripts/read/read';
+import './scripts/read/themeRead';
+import './scripts/read/themeReadMobile';
+import './scripts/read/searchNewsFromReadStorage';
