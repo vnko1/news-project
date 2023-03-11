@@ -1,6 +1,9 @@
 import './scripts/common/current';
 import './scripts/common/mobileMenu';
 import './scripts/common/authMenu';
+import './scripts/firebase/authState';
+import './scripts/firebase/logIn';
+import './scripts/firebase/logOut';
 import './scripts/main/mostPopular';
 import './scripts/main/searchNews';
 import './scripts/main/filters';
