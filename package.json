@@ -21,7 +21,6 @@
     "@uvarov.frontend/vanilla-calendar": "^2.4.0",
     "axios": "^1.3.4",
     "body-scroll-lock": "^4.0.0-beta.0",
-    "caniuse-lite": "^1.0.30001464",
     "modern-normalize": "^1.1.0",
     "notiflix": "^3.2.6",
     "spin.js": "^4.1.1"
