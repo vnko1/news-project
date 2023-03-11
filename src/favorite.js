@@ -1,8 +1,8 @@
-import './scripts/current';
-import './scripts/mobileMenu';
-import './scripts/authMenu';
-import './scripts/newsCardFromStorage';
+import './scripts/common/current';
+import './scripts/common/mobileMenu';
+import './scripts/common/authMenu';
+import './scripts/common/newsCardFromStorage';
 import './scripts/favoriteBlock';
-import './scripts/themeFavorite';
-import './scripts/themeFavoriteMobile';
-import './scripts/searchNewsfromFavoriteStorage';
+import './scripts/favorite/themeFavorite';
+import './scripts/favorite/themeFavoriteMobile';
+import './scripts/favorite/searchNewsfromFavoriteStorage';
