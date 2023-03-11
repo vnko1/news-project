@@ -1,17 +1,19 @@
 <section class="reg-section section">
   <div class="container reg-container">
-    <form class="reg-form" name="reg_form" autocomplete="on" novalidate>
-      <label class="reg-label">
-        <p class="reg-text">Name</p>
-        <input class="reg-input" type="text" name="name" />
-      </label>
+    <form class="reg-form" name="reg_form" validate>
       <label class="reg-label">
         <p class="reg-text">Email</p>
-        <input class="reg-input" type="email" name="email" />
+        <input class="reg-input" type="email" name="email" required />
       </label>
       <label class="reg-label">
         <p class="reg-text">Password</p>
-        <input class="reg-input" type="password" name="password" />
+        <input
+          class="reg-input"
+          type="password"
+          name="password"
+          required
+          autocomplete
+        />
       </label>
       <button class="reg-btn auth-btn sumbit-btn" type="submit">Submit</button>
     </form>
