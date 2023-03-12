@@ -89,11 +89,7 @@ function refreshLinkStorage(myResult, list, newObj) {
   } else {
     const linkIndex = list.findIndex(object => object.id === newObj.id);
 
-    list.splice(linkIndex, 1);
-    list.push(newObj);
-
-    //   localStorage.setItem('read more', JSON.stringify(list));
-    users.setData('readMore', list);
+    users.deleteData('readMore', linkIndex);
   }
 }
 
@@ -101,19 +97,13 @@ function refreshFavouritesStorage(myResult, list, newObj) {
   console.log(myResult);
   if (!myResult) {
     if (!list) list = [];
-    // console.log(list);
+
     list.push(newObj);
 
-    //   localStorage.setItem('favourites', JSON.stringify(list));
     users.setData('favourites', list);
   } else {
     const linkIndex = list.findIndex(object => object.id === newObj.id);
-
-    list.splice(linkIndex, 1);
-    list.push(newObj);
-
-    //   localStorage.setItem('favourites', JSON.stringify(list));
-    users.setData('favourites', list);
+    users.deleteData('favourites', linkIndex);
   }
 }
 

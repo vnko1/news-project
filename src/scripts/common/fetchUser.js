@@ -55,6 +55,12 @@ class User {
   async setData(typeOfData, data) {
     await axios.put(`${BASE_URL}/${this.getId()}/${typeOfData}.json`, data);
   }
+
+  async deleteData(typeOfData, index) {
+    await axios.delete(
+      `${BASE_URL}/${this.getId()}/${typeOfData}/${index}.json`
+    );
+  }
 }
 
 export const users = new User();
