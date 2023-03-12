@@ -22,7 +22,7 @@ async function onClick(event) {
 
     const arrayChildren = event.target.parentNode.parentNode.parentNode;
 
-    const newObj = {
+    const newData = {
       id: arrayChildren.attributes[1].nodeValue,
       img: arrayChildren.children[0].children[1].src,
       alt: arrayChildren.children[0].children[1].alt,
@@ -33,14 +33,13 @@ async function onClick(event) {
       category: arrayChildren.children[0].children[0].textContent,
     };
 
-    const favouriteLinks = await users.getData('favourites');
-
+    const favouriteLinks = await users.getAllData('favourites');
     let myResult = null;
-    if (favouriteLinks) {
-      myResult = favouriteLinks.some(object => object.id === newObj.id);
-    }
 
-    refreshFavouritesStorage(myResult, favouriteLinks, newObj);
+    if (!favouriteLinks) myResult = favouriteLinks;
+    else myResult = favouriteLinks[newData.id];
+
+    refreshFavouritesStorage(myResult, newData);
   }
 
   //--------------------Read more--------------------------------
@@ -50,7 +49,7 @@ async function onClick(event) {
 
     const arrayChildren = event.target.parentNode.parentNode;
 
-    const newObj = {
+    const newData = {
       date: getDateForCreateObjToStorage(),
       id: arrayChildren.attributes[1].nodeValue,
       img: arrayChildren.children[0].children[1].src,
@@ -62,43 +61,25 @@ async function onClick(event) {
       category: arrayChildren.children[0].children[0].textContent,
     };
 
-    const readMoreList = await users.getData('readMore');
+    const readMoreList = await users.getAllData('readMore');
     let myResult = null;
-    if (readMoreList) {
-      myResult = readMoreList.some(object => object.id === newObj.id);
-    }
+    if (!readMoreList) myResult = readMoreList;
+    else myResult = readMoreList[newData.id];
 
-    refreshLinkStorage(myResult, readMoreList, newObj);
+    refreshLinkStorage(myResult, newData);
   }
 }
 
 //================================================
 
-function refreshLinkStorage(myResult, list, newObj) {
-  if (!myResult) {
-    if (!list) list = [];
-    list.push(newObj);
-    users.setData('readMore', list);
-    // localStorage.setItem('read more', JSON.stringify(list));
-  } else {
-    const linkIndex = list.findIndex(object => object.id === newObj.id);
-
-    users.deleteData('readMore', linkIndex);
-  }
+function refreshLinkStorage(myResult, newData) {
+  if (!myResult) users.setData('readMore', newData.id, newData);
+  else users.deleteData('readMore', newData.id);
 }
 
-function refreshFavouritesStorage(myResult, list, newObj) {
-  console.log(myResult);
-  if (!myResult) {
-    if (!list) list = [];
-
-    list.push(newObj);
-
-    users.setData('favourites', list);
-  } else {
-    const linkIndex = list.findIndex(object => object.id === newObj.id);
-    users.deleteData('favourites', linkIndex);
-  }
+function refreshFavouritesStorage(myResult, newData) {
+  if (!myResult) users.setData('favourites', newData.id, newData);
+  else users.deleteData('favourites', newData.id);
 }
 
 function getDateForCreateObjToStorage() {
@@ -106,119 +87,3 @@ function getDateForCreateObjToStorage() {
 
   return date.getTime();
 }
-
-// import { getStorageList } from './commonFunctions';
-
-// const gallery = document.querySelector('.gallery-container');
-
-// if (localStorage.getItem('favourites') === null) {
-//   addEmptyArrtoStorage('favourites');
-// }
-
-// if (localStorage.getItem('read more') === null) {
-//   addEmptyArrtoStorage('read more');
-// }
-
-// gallery.addEventListener('click', onClick); // повесить слушателя на галерею
-
-// function onClick(event) {
-//   //--------------------Favourites--------------------------------
-//   if (event.target.tagName === 'BUTTON') {
-//     //label
-//     event.target.parentNode.children[0].classList.toggle(
-//       'js-favourite-storage'
-//     );
-
-//     if (event.target.parentNode.children[0].textContent === 'Add to favorite') {
-//       event.target.parentNode.children[0].textContent = 'Remove from favorite';
-//     } else if (
-//       event.target.parentNode.children[0].textContent === 'Remove from favorite'
-//     ) {
-//       event.target.parentNode.children[0].textContent = 'Add to favorite';
-//     }
-
-//     const arrayChildren = event.target.parentNode.parentNode.parentNode;
-
-//     const newObj = {
-//       id: arrayChildren.attributes[1].nodeValue,
-//       img: arrayChildren.children[0].children[1].src,
-//       alt: arrayChildren.children[0].children[1].alt,
-//       title: arrayChildren.children[1].textContent,
-//       descr: arrayChildren.children[2].textContent,
-//       dateArticle: arrayChildren.children[3].children[0].textContent,
-//       link: arrayChildren.children[3].children[1].href,
-//       category: arrayChildren.children[0].children[0].textContent,
-//     };
-
-//     const favouriteLinks = getStorageList('favourites');
-
-//     const myResult = favouriteLinks.some(object => object.id === newObj.id);
-//     console.log('click');
-//     console.log(favouriteLinks);
-//     console.log(myResult);
-//     refreshFavouritesStorage(myResult, favouriteLinks, newObj);
-//   }
-
-//   //--------------------Read more--------------------------------
-
-//   if (event.target.textContent === 'Read more') {
-//     // event.preventDefault();
-//     event.target.classList.add('js-read-more-storage');
-
-//     const arrayChildren = event.target.parentNode.parentNode;
-
-//     const newObj = {
-//       date: getDateForCreateObjToStorage(),
-//       id: arrayChildren.attributes[1].nodeValue,
-//       img: arrayChildren.children[0].children[1].src,
-//       alt: arrayChildren.children[0].children[1].alt,
-//       title: arrayChildren.children[1].textContent,
-//       descr: arrayChildren.children[2].textContent,
-//       dateArticle: arrayChildren.children[3].children[0].textContent,
-//       link: arrayChildren.children[3].children[1].href,
-//       category: arrayChildren.children[0].children[0].textContent,
-//     };
-
-//     const readMoreList = getStorageList('read more');
-//     const myResult = readMoreList.some(object => object.id === newObj.id);
-
-//     refreshLinkStorage(myResult, readMoreList, newObj);
-//   }
-// }
-
-// //================================================
-
-// function refreshLinkStorage(myResult, list, newObj) {
-//   if (!myResult) {
-//     list.push(newObj);
-//     localStorage.setItem('read more', JSON.stringify(list));
-//   } else {
-//     const linkIndex = list.findIndex(object => object.id === newObj.id);
-
-//     list.splice(linkIndex, 1);
-//     list.push(newObj);
-//     localStorage.setItem('read more', JSON.stringify(list));
-//   }
-// }
-
-// function refreshFavouritesStorage(myResult, list, newObj) {
-//   if (!myResult) {
-//     list.push(newObj);
-//     localStorage.setItem('favourites', JSON.stringify(list));
-//   } else {
-//     const linkIndex = list.findIndex(object => object.id === newObj.id);
-
-//     list.splice(linkIndex, 1);
-//     localStorage.setItem('favourites', JSON.stringify(list));
-//   }
-// }
-
-// function addEmptyArrtoStorage(valueOfKeyStorage) {
-//   localStorage.setItem(valueOfKeyStorage, JSON.stringify([]));
-// }
-
-// function getDateForCreateObjToStorage() {
-//   const date = new Date();
-
-//   return date.getTime();
-// }

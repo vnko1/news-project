@@ -44,7 +44,7 @@ class User {
     this.id = '';
   }
 
-  async getData(typeOfData) {
+  async getAllData(typeOfData) {
     const { data } = await axios.get(
       `${BASE_URL}/${this.getId()}/${typeOfData}.json`
     );
@@ -52,14 +52,23 @@ class User {
     return data;
   }
 
-  async setData(typeOfData, data) {
-    await axios.put(`${BASE_URL}/${this.getId()}/${typeOfData}.json`, data);
+  async getData(typeOfData, id) {
+    const { data } = await axios.get(
+      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json`
+    );
+
+    return data;
   }
 
-  async deleteData(typeOfData, index) {
-    await axios.delete(
-      `${BASE_URL}/${this.getId()}/${typeOfData}/${index}.json`
+  async setData(typeOfData, id, data) {
+    await axios.put(
+      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json`,
+      data
     );
+  }
+
+  async deleteData(typeOfData, id) {
+    await axios.delete(`${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json`);
   }
 }
 
