@@ -1,4 +1,5 @@
 import { fetchNews } from './fetchNews';
+import { users } from 'firebase/auth';
 
 const gallery = document.querySelector('.gallery-container');
 const modal = document.querySelector('.empty-page');
@@ -221,7 +222,8 @@ function cutInfo(text) {
 }
 
 // Вставить функцию в блок then(), после функции которая рендерит разметку!!!
-function addClassesForCoincidencesMarkupAndStorage() {
+async function addClassesForCoincidencesMarkupAndStorage() {
+  // const favourite = await users.getAllData('favourites');
   const favouriteList = getStorageList('favourites');
   const labelsEl = document.querySelectorAll('.label-favorite');
   const newArrOfBtn = [...labelsEl];
