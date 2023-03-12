@@ -1,3 +1,8 @@
+import axios from 'axios';
+
+const BASE_URL =
+  'https://news-my-project-default-rtdb.europe-west1.firebasedatabase.app/users';
+
 class User {
   constructor() {
     this.name = '';
@@ -37,6 +42,18 @@ class User {
     this.name = '';
     this.email = '';
     this.id = '';
+  }
+
+  async getData(typeOfData) {
+    const { data } = await axios.get(
+      `${BASE_URL}/${this.getId()}/${typeOfData}.json`
+    );
+
+    return data;
+  }
+
+  async setData(typeOfData, data) {
+    await axios.put(`${BASE_URL}/${this.getId()}/${typeOfData}.json`, data);
   }
 }
 

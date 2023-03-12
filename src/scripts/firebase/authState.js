@@ -18,13 +18,13 @@ async function checkLogin(user) {
   if (user) {
     users.updateProfile(user.displayName, user.email, user.uid);
 
-    onLogIn();
+    onIsLogIn();
   } else {
-    onLogOut();
+    onIsLogOut();
   }
 }
 
-function onLogIn() {
+async function onIsLogIn() {
   userEl.textContent = users.getName();
   userMobEl.textContent = users.getName();
   signInBtn.disabled = 'true';
@@ -33,7 +33,7 @@ function onLogIn() {
   signOutBtnMob.removeAttribute('disabled');
 }
 
-function onLogOut() {
+function onIsLogOut() {
   userEl.textContent = 'user';
   userMobEl.textContent = 'user';
   signOutBtn.disabled = 'true';
