@@ -19,6 +19,7 @@ async function onLoad() {
     paginationByQuery();
     fetchNews.setNodeChild(document.querySelectorAll('.news-card'));
     fetchNews.setIsUrlRequest(true);
+
     addClassesForCoincidencesMarkupAndStorage();
   } catch (error) {
     console.log(error);

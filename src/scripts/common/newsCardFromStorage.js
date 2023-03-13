@@ -1,19 +1,10 @@
-import { getStorageList } from './commonFunctions';
+import { users } from '../common/fetchUser';
 
 const gallery = document.querySelector('.gallery-container');
 
-if (localStorage.getItem('favourites') === null) {
-  addEmptyArrtoStorage('favourites');
-}
-
-if (localStorage.getItem('read more') === null) {
-  addEmptyArrtoStorage('read more');
-}
-
 gallery.addEventListener('click', onClick); // повесить слушателя на галерею
 
-function onClick(event) {
-  //--------------------Favourites--------------------------------
+async function onClick(event) {
   if (event.target.tagName === 'BUTTON') {
     event.target.parentNode.children[0].classList.toggle(
       'js-favourite-storage'
@@ -21,13 +12,15 @@ function onClick(event) {
 
     if (event.target.parentNode.children[0].textContent === 'Add to favorite') {
       event.target.parentNode.children[0].textContent = 'Remove from favorite';
-    } else if(event.target.parentNode.children[0].textContent === 'Remove from favorite'){
-      event.target.parentNode.children[0].textContent = 'Add to favorite'
+    } else if (
+      event.target.parentNode.children[0].textContent === 'Remove from favorite'
+    ) {
+      event.target.parentNode.children[0].textContent = 'Add to favorite';
     }
 
     const arrayChildren = event.target.parentNode.parentNode.parentNode;
 
-    const newObj = {
+    const newData = {
       id: arrayChildren.attributes[1].nodeValue,
       img: arrayChildren.children[0].children[1].src,
       alt: arrayChildren.children[0].children[1].alt,
@@ -38,20 +31,23 @@ function onClick(event) {
       category: arrayChildren.children[0].children[0].textContent,
     };
 
-    const favouriteLinks = getStorageList('favourites');
-    const myResult = favouriteLinks.some(object => object.id === newObj.id);
+    const favouriteLinks = await users.getAllData('favourites');
+    let myResult = null;
 
-    refreshFavouritesStorage(myResult, favouriteLinks, newObj);
+    if (!favouriteLinks) myResult = favouriteLinks;
+    else myResult = favouriteLinks[newData.id];
+
+    refreshFavouritesStorage(myResult, newData);
   }
 
   //--------------------Read more--------------------------------
 
   if (event.target.textContent === 'Read more') {
-    event.target.classList.add('js-read-more-storage-pages');
+    event.target.classList.add('js-read-more-storage');
 
     const arrayChildren = event.target.parentNode.parentNode;
 
-    const newObj = {
+    const newData = {
       date: getDateForCreateObjToStorage(),
       id: arrayChildren.attributes[1].nodeValue,
       img: arrayChildren.children[0].children[1].src,
@@ -63,44 +59,24 @@ function onClick(event) {
       category: arrayChildren.children[0].children[0].textContent,
     };
 
-    const readMoreList = getStorageList('read more');
-    const myResult = readMoreList.some(object => object.id === newObj.id);
+    const readMoreList = await users.getAllData('readMore');
+    let myResult = null;
+    if (!readMoreList) myResult = readMoreList;
+    else myResult = readMoreList[newData.id];
 
-    refreshLinkStorage(myResult, readMoreList, newObj);
+    refreshLinkStorage(myResult, newData);
   }
 }
 
-//================================================
-
-function refreshLinkStorage(myResult, list, newObj) {
-  if (!myResult) {
-    list.push(newObj);
-    localStorage.setItem('read more', JSON.stringify(list));
-  } else {
-    const linkIndex = list.findIndex(object => object.id === newObj.id);
-
-    list.splice(linkIndex, 1);
-    list.push(newObj);
-    localStorage.setItem('read more', JSON.stringify(list));
-  }
+function refreshLinkStorage(myResult, newData) {
+  if (!myResult) users.setData('readMore', newData.id, newData);
+  else users.deleteData('readMore', newData.id);
 }
 
-function refreshFavouritesStorage(myResult, list, newObj) {
-  if (!myResult) {
-    list.push(newObj);
-    localStorage.setItem('favourites', JSON.stringify(list));
-  } else {
-    const linkIndex = list.findIndex(object => object.id === newObj.id);
-
-    list.splice(linkIndex, 1);
-    localStorage.setItem('favourites', JSON.stringify(list));
-  }
+function refreshFavouritesStorage(myResult, newData) {
+  if (!myResult) users.setData('favourites', newData.id, newData);
+  else users.deleteData('favourites', newData.id);
 }
-
-function addEmptyArrtoStorage(valueOfKeyStorage) {
-  localStorage.setItem(valueOfKeyStorage, JSON.stringify([]));
-}
-
 function getDateForCreateObjToStorage() {
   const date = new Date();
 

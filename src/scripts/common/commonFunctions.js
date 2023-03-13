@@ -1,5 +1,9 @@
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../firebase/firebaseApi';
 import { fetchNews } from './fetchNews';
+import { users } from './fetchUser';
 
+const auth = getAuth(app);
 const gallery = document.querySelector('.gallery-container');
 const modal = document.querySelector('.empty-page');
 const weather = document.querySelector('.weather-card');
@@ -138,7 +142,7 @@ function saveCategoryData(data) {
       url: el.url,
       img,
       imgDescr,
-      id: el.uri,
+      id: el.uri.replace('nyt://article/', ''),
     };
 
     pushData(obj);
@@ -195,7 +199,7 @@ function saveSearchData(data) {
       url: element.web_url,
       img,
       imgDescr,
-      id: element._id,
+      id: element._id.replace('nyt://article/', ''),
     };
     pushData(obj);
   });
@@ -222,55 +226,67 @@ function cutInfo(text) {
 
 // Вставить функцию в блок then(), после функции которая рендерит разметку!!!
 function addClassesForCoincidencesMarkupAndStorage() {
-  const favouriteList = getStorageList('favourites');
-  const labelsEl = document.querySelectorAll('.label-favorite');
-  const newArrOfBtn = [...labelsEl];
-
-  newArrOfBtn.filter(obj => {
-    for (const objOfFavourite of favouriteList) {
-      if (obj.id == objOfFavourite.id) {
-        obj.className = 'mybtn label-favorite js-favourite-storage';
-        obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
-      }
-    }
-  });
-  //-----------------------------------------
-  const readMoreList = getStorageList('read more');
-
-  const linkEl = document.querySelectorAll('.news-card__more');
-
-  const newArrOfLinks = [...linkEl];
-
-  newArrOfLinks.filter(obj => {
-    for (const objOfFavourite of readMoreList) {
-      if (obj.id === objOfFavourite.id) {
-        obj.className = 'news-card__more js-read-more-storage';
-      }
-    }
-  });
+  onAuthStateChanged(auth, checkIsLoginOnMain);
 }
 
-// функция для страниц fovorite и read more
+async function checkIsLoginOnMain(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+
+    const favourite = await users.getAllData('favourites');
+    const labelsEl = document.querySelectorAll('.label-favorite');
+    const newArrOfBtn = [...labelsEl];
+    if (favourite) {
+      newArrOfBtn.filter(obj => {
+        if (favourite[obj.id]) {
+          obj.className = 'mybtn label-favorite js-favourite-storage';
+          obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
+        }
+      });
+    }
+
+    //-----------------------------------------
+    const readMore = await users.getAllData('readMore');
+    const linkEl = document.querySelectorAll('.news-card__more');
+    const newArrOfLinks = [...linkEl];
+
+    if (readMore) {
+      newArrOfLinks.filter(obj => {
+        if (readMore[obj.id]) {
+          obj.className = 'news-card__more js-read-more-storage';
+        }
+      });
+    }
+  } else {
+  }
+}
+
 function addClassesForCoincidencesMarkupAndStoragePages() {
-  const favouriteList = getStorageList('favourites');
-  const labelsEl = document.querySelectorAll('.label-favorite');
-  const newArrOfBtn = [...labelsEl];
-  newArrOfBtn.filter(obj => {
-    for (const objOfFavourite of favouriteList) {
-      if (obj.id === objOfFavourite.id) {
-        obj.className = 'mybtn label-favorite js-favourite-storage';
-        obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
-      }
+  onAuthStateChanged(auth, checkIsLogin);
+}
+
+async function checkIsLogin(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+
+    const favourite = await users.getAllData('favourites');
+    const labelsEl = document.querySelectorAll('.label-favorite');
+    const newArrOfBtn = [...labelsEl];
+    if (favourite) {
+      newArrOfBtn.filter(obj => {
+        if (favourite[obj.id]) {
+          obj.className = 'mybtn label-favorite js-favourite-storage';
+          obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
+        }
+      });
     }
-  });
+  } else {
+  }
 }
 
-// Взять данные с ЛОКАЛСТОРИДЖ
-function getStorageList(valueOfKeyStorage) {
-  return JSON.parse(localStorage.getItem(valueOfKeyStorage));
-}
-
-function showModal() {
+function showModal(message) {
+  const messageEl = document.querySelector('.empty-page__title');
+  messageEl.textContent = message;
   modal.classList.remove('is-hidden');
   gallery.innerHTML = '';
 }
@@ -291,6 +307,15 @@ function mainPageHideModal() {
   weather.classList.remove('is-hidden');
 }
 
+function createDataList(data) {
+  const dataList = [];
+  const keys = Object.keys(data);
+  for (const key of keys) {
+    dataList.push(data[key]);
+  }
+  return dataList;
+}
+
 export {
   cutInfo,
   formatDate,
@@ -300,12 +325,11 @@ export {
   saveCategoryData,
   savePopularData,
   saveSearchData,
-  getStorageList,
   addClassesForCoincidencesMarkupAndStorage,
   addClassesForCoincidencesMarkupAndStoragePages,
   mainPageShowModal,
   mainPageHideModal,
   showModal,
   hideModal,
+  createDataList,
 };
-// ----------------

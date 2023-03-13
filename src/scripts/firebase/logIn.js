@@ -1,7 +1,7 @@
-import { app } from './firebaseApi';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { users } from '../common/fetchUser';
 import { Report } from 'notiflix/build/notiflix-report-aio';
+import { users } from '../common/fetchUser';
+import { app } from './firebaseApi';
 
 const auth = getAuth(app);
 const authForm = document.querySelector('.auth-form');
@@ -29,7 +29,7 @@ async function onAuthSubmit(e) {
     users.updateProfile(user.displayName, user.email, user.uid);
     changeVisual();
   } catch {
-    Report.info('This user is not registred');
+    Report.failure('This user is not registred');
   }
 }
 
