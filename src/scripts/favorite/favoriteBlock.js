@@ -87,8 +87,11 @@ function renderFavouriteCardFromStorage(dataList) {
   gallery.insertAdjacentHTML('beforeend', markUp);
 }
 
-function onClickRemoveBtn(e) {
+async function onClickRemoveBtn(e) {
   if (e.target.tagName === 'BUTTON') {
+    const id =
+      e.target.parentNode.parentNode.parentNode.getAttribute('news-id');
+    await users.deleteData('favourites', id);
     e.target.parentNode.parentNode.parentNode.remove();
   }
 }
