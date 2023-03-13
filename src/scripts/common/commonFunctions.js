@@ -226,6 +226,42 @@ function cutInfo(text) {
 
 // Вставить функцию в блок then(), после функции которая рендерит разметку!!!
 function addClassesForCoincidencesMarkupAndStorage() {
+  onAuthStateChanged(auth, checkIsLoginOnMain);
+}
+
+async function checkIsLoginOnMain(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+
+    const favourite = await users.getAllData('favourites');
+    const labelsEl = document.querySelectorAll('.label-favorite');
+    const newArrOfBtn = [...labelsEl];
+    if (favourite) {
+      newArrOfBtn.filter(obj => {
+        if (favourite[obj.id]) {
+          obj.className = 'mybtn label-favorite js-favourite-storage';
+          obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
+        }
+      });
+    }
+
+    //-----------------------------------------
+    const readMore = await users.getAllData('readMore');
+    const linkEl = document.querySelectorAll('.news-card__more');
+    const newArrOfLinks = [...linkEl];
+
+    if (readMore) {
+      newArrOfLinks.filter(obj => {
+        if (readMore[obj.id]) {
+          obj.className = 'news-card__more js-read-more-storage';
+        }
+      });
+    }
+  } else {
+  }
+}
+
+function addClassesForCoincidencesMarkupAndStoragePages() {
   onAuthStateChanged(auth, checkIsLogin);
 }
 
@@ -244,43 +280,9 @@ async function checkIsLogin(user) {
         }
       });
     }
-
-    //-----------------------------------------
-
-    const readMore = await users.getAllData('readMore');
-    const linkEl = document.querySelectorAll('.news-card__more');
-    const newArrOfLinks = [...linkEl];
-
-    if (readMore) {
-      newArrOfLinks.filter(obj => {
-        if (readMore[obj.id]) {
-          obj.className = 'news-card__more js-read-more-storage';
-        }
-      });
-    }
   } else {
   }
 }
-
-// функция для страниц fovorite и read more
-function addClassesForCoincidencesMarkupAndStoragePages() {
-  const favouriteList = getStorageList('favourites');
-  const labelsEl = document.querySelectorAll('.label-favorite');
-  const newArrOfBtn = [...labelsEl];
-  newArrOfBtn.filter(obj => {
-    for (const objOfFavourite of favouriteList) {
-      if (obj.id === objOfFavourite.id) {
-        obj.className = 'mybtn label-favorite js-favourite-storage';
-        obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
-      }
-    }
-  });
-}
-
-// // Взять данные с ЛОКАЛСТОРИДЖ
-// function getStorageList(valueOfKeyStorage) {
-//   return JSON.parse(localStorage.getItem(valueOfKeyStorage));
-// }
 
 function showModal() {
   modal.classList.remove('is-hidden');
@@ -312,7 +314,6 @@ export {
   saveCategoryData,
   savePopularData,
   saveSearchData,
-  getStorageList,
   addClassesForCoincidencesMarkupAndStorage,
   addClassesForCoincidencesMarkupAndStoragePages,
   mainPageShowModal,
