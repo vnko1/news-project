@@ -1,4 +1,7 @@
+import { app } from '../firebase/firebaseApi';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { fetchNews } from '../common/fetchNews';
+import { users } from '../common/fetchUser';
 import { spinner } from '../common/libraries';
 import {
   renderNewsCards,
@@ -6,6 +9,8 @@ import {
   addClassesForCoincidencesMarkupAndStorage,
 } from '../common/commonFunctions';
 import { paginationByQuery } from './pagination';
+
+const auth = getAuth(app);
 
 onLoad();
 
@@ -19,10 +24,18 @@ async function onLoad() {
     paginationByQuery();
     fetchNews.setNodeChild(document.querySelectorAll('.news-card'));
     fetchNews.setIsUrlRequest(true);
-    addClassesForCoincidencesMarkupAndStorage();
+    onAuthStateChanged(auth, checkLogin);
   } catch (error) {
     console.log(error);
     spinner.stop();
   }
   spinner.stop();
+}
+async function checkLogin(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+
+    addClassesForCoincidencesMarkupAndStorage();
+  } else {
+  }
 }

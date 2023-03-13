@@ -1,5 +1,5 @@
 import { fetchNews } from './fetchNews';
-import { users } from 'firebase/auth';
+import { users } from './fetchUser';
 
 const gallery = document.querySelector('.gallery-container');
 const modal = document.querySelector('.empty-page');
@@ -223,34 +223,62 @@ function cutInfo(text) {
 
 // Вставить функцию в блок then(), после функции которая рендерит разметку!!!
 async function addClassesForCoincidencesMarkupAndStorage() {
-  // const favourite = await users.getAllData('favourites');
-  const favouriteList = getStorageList('favourites');
+  const favourite = await users.getAllData('favourites');
   const labelsEl = document.querySelectorAll('.label-favorite');
   const newArrOfBtn = [...labelsEl];
-
-  newArrOfBtn.filter(obj => {
-    for (const objOfFavourite of favouriteList) {
-      if (obj.id == objOfFavourite.id) {
+  if (favourite) {
+    newArrOfBtn.filter(obj => {
+      if (favourite[obj.id]) {
         obj.className = 'mybtn label-favorite js-favourite-storage';
         obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
       }
-    }
-  });
+    });
+  }
+
   //-----------------------------------------
-  const readMoreList = getStorageList('read more');
 
+  const readMore = await users.getAllData('readMore');
   const linkEl = document.querySelectorAll('.news-card__more');
-
   const newArrOfLinks = [...linkEl];
 
-  newArrOfLinks.filter(obj => {
-    for (const objOfFavourite of readMoreList) {
-      if (obj.id === objOfFavourite.id) {
+  if (readMore) {
+    newArrOfLinks.filter(obj => {
+      if (readMore[obj.id]) {
         obj.className = 'news-card__more js-read-more-storage';
       }
-    }
-  });
+    });
+  }
 }
+
+// async function addClassesForCoincidencesMarkupAndStorage() {
+//   // const favourite = await users.getAllData('favourites');
+//   const favouriteList = getStorageList('favourites');
+//   const labelsEl = document.querySelectorAll('.label-favorite');
+//   const newArrOfBtn = [...labelsEl];
+
+//   newArrOfBtn.filter(obj => {
+//     for (const objOfFavourite of favouriteList) {
+//       if (obj.id == objOfFavourite.id) {
+//         obj.className = 'mybtn label-favorite js-favourite-storage';
+//         obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
+//       }
+//     }
+//   });
+//   //-----------------------------------------
+//   const readMoreList = getStorageList('read more');
+
+//   const linkEl = document.querySelectorAll('.news-card__more');
+
+//   const newArrOfLinks = [...linkEl];
+
+//   newArrOfLinks.filter(obj => {
+//     for (const objOfFavourite of readMoreList) {
+//       if (obj.id === objOfFavourite.id) {
+//         obj.className = 'news-card__more js-read-more-storage';
+//       }
+//     }
+//   });
+// }
 
 // функция для страниц fovorite и read more
 function addClassesForCoincidencesMarkupAndStoragePages() {
