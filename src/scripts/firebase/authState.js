@@ -2,13 +2,13 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from './firebaseApi';
 import { users } from '../common/fetchUser';
 
+const auth = getAuth(app);
 const userEl = document.querySelector('.user-name-header');
 const userMobEl = document.querySelector('.user-name-mobile');
 const signInBtn = document.querySelector('.sign-in-btn');
 const signInBtnMob = document.querySelector('.sign-in-btn-mob');
 const signOutBtn = document.querySelector('.log-out-btn');
 const signOutBtnMob = document.querySelector('.log-out-btn-mob');
-const auth = getAuth(app);
 
 onAuthStateChanged(auth, checkIsLogin);
 

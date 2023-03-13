@@ -1,43 +1,59 @@
-import {
-  getStorageList,
-  addClassesForCoincidencesMarkupAndStoragePages,
-} from '../common/commonFunctions'; // імпорт  функції для взяття  данних з сториджу
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { spinner } from '../common/libraries';
+import { app } from '../firebase/firebaseApi';
+import { users } from '../common/fetchUser';
 
-// gallery-container - додатковий класс на контейнер в якому малюється розмітка
+const auth = getAuth(app);
 const gallery = document.querySelector('.gallery-container');
 
-onLoadFavorite();
-addClassesForCoincidencesMarkupAndStoragePages();
+gallery.addEventListener('click', onClickRemoveBtn);
 
-function onLoadFavorite() {
-  // функція загрузки зі сториджа та перевірки парсінгу
-  spinner.spin(document.body);
-  try {
-    const keyFavorite = localStorage.getItem('favourites');
-    const parsedFavorite = JSON.parse(keyFavorite);
-    if (parsedFavorite === null) {
-      spinner.stop();
-      return;
-    } else if (parsedFavorite.length === 0) {
-      spinner.stop();
-      Report.info('You have no favorite news yet!');
-    } else {
-      renderFavouriteCardFromStorage();
-      spinner.stop();
-    }
-  } catch (error) {
-    console.log(error);
+onAuthStateChanged(auth, checkIsLogin);
+
+function checkIsLogin(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+    onLoadFavoriteNews();
+  } else {
   }
 }
 
-function renderFavouriteCardFromStorage() {
-  //  функція для отримання масиву з сториджа
-  const arrFavourites = getStorageList('favourites');
+async function onLoadFavoriteNews() {
+  // функція загрузки зі сториджа та перевірки парсінгу
+  spinner.spin(document.body);
+  try {
+    const favourite = await users.getAllData('favourites');
 
-  // створюємо строку розмітки
-  const markUp = arrFavourites.reduce((acc, el) => {
+    // const keyFavorite = localStorage.getItem('favourites');
+    // const parsedFavorite = JSON.parse(keyFavorite);
+    if (!favourite) {
+      spinner.stop();
+      Report.info('You have no favorite news yet!');
+      return;
+    } else {
+      const dataList = createDataList(favourite);
+      renderFavouriteCardFromStorage(dataList);
+      // addClassesForCoincidencesMarkupAndStoragePages();
+    }
+  } catch (error) {
+    console.log(error);
+    spinner.stop();
+  }
+  spinner.stop();
+}
+
+function createDataList(data) {
+  const dataList = [];
+  const keys = Object.keys(data);
+  for (const key of keys) {
+    dataList.push(data[key]);
+  }
+  return dataList;
+}
+
+function renderFavouriteCardFromStorage(dataList) {
+  const markUp = dataList.reduce((acc, el) => {
     acc += `<div class="news-card" news-id="${el.id}">
       <div class="news-card__img">
         <p class="news-card__theme">${el.category}</p>
@@ -70,8 +86,6 @@ function renderFavouriteCardFromStorage() {
 
   gallery.insertAdjacentHTML('beforeend', markUp);
 }
-
-gallery.addEventListener('click', onClickRemoveBtn);
 
 function onClickRemoveBtn(e) {
   if (e.target.tagName === 'BUTTON') {

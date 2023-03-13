@@ -277,10 +277,10 @@ function addClassesForCoincidencesMarkupAndStoragePages() {
   });
 }
 
-// Взять данные с ЛОКАЛСТОРИДЖ
-function getStorageList(valueOfKeyStorage) {
-  return JSON.parse(localStorage.getItem(valueOfKeyStorage));
-}
+// // Взять данные с ЛОКАЛСТОРИДЖ
+// function getStorageList(valueOfKeyStorage) {
+//   return JSON.parse(localStorage.getItem(valueOfKeyStorage));
+// }
 
 function showModal() {
   modal.classList.remove('is-hidden');
