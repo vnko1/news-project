@@ -1,5 +1,4 @@
 import {
-  getStorageList,
   showModal,
   hideModal,
   addClassesForCoincidencesMarkupAndStoragePages,
