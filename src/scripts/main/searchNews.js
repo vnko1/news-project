@@ -30,7 +30,7 @@ async function onFormSubmit(event) {
     //якщо нічого не ввели в інпут
 
     if (!query) {
-      Report.failure('Please enter a search term.');
+      Report.info('Please enter a search term.');
       spinner.stop();
       return;
     }
@@ -132,7 +132,7 @@ function saveData(data) {
       url: article.web_url,
       img,
       imgDescr: article.keywords[0]?.value ? article.keywords[0].value : '', //
-      id: article._id,
+      id: article._id.replace('nyt://article/', ''),
     };
 
     pushData(obj);

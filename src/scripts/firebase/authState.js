@@ -1,6 +1,5 @@
-import { app } from './firebaseApi';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
+import { app } from './firebaseApi';
 import { users } from '../common/fetchUser';
 
 const userEl = document.querySelector('.user-name-header');
@@ -11,9 +10,9 @@ const signOutBtn = document.querySelector('.log-out-btn');
 const signOutBtnMob = document.querySelector('.log-out-btn-mob');
 const auth = getAuth(app);
 
-onAuthStateChanged(auth, checkLogin);
+onAuthStateChanged(auth, checkIsLogin);
 
-async function checkLogin(user) {
+function checkIsLogin(user) {
   if (user) {
     users.updateProfile(user.displayName, user.email, user.uid);
 

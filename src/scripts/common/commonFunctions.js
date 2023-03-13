@@ -1,5 +1,5 @@
-import { app } from '../firebase/firebaseApi';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../firebase/firebaseApi';
 import { fetchNews } from './fetchNews';
 import { users } from './fetchUser';
 
@@ -199,7 +199,7 @@ function saveSearchData(data) {
       url: element.web_url,
       img,
       imgDescr,
-      id: element._id,
+      id: element._id.replace('nyt://article/', ''),
     };
     pushData(obj);
   });
@@ -232,6 +232,7 @@ function addClassesForCoincidencesMarkupAndStorage() {
 async function checkIsLogin(user) {
   if (user) {
     users.updateProfile(user.displayName, user.email, user.uid);
+
     const favourite = await users.getAllData('favourites');
     const labelsEl = document.querySelectorAll('.label-favorite');
     const newArrOfBtn = [...labelsEl];

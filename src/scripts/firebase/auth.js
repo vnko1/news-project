@@ -3,8 +3,8 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from 'firebase/auth';
-import { app } from './firebaseApi';
 import { Report } from 'notiflix/build/notiflix-report-aio';
+import { app } from './firebaseApi';
 import { spinner } from '../common/libraries';
 
 const auth = getAuth(app);

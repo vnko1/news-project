@@ -1,10 +1,25 @@
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { app } from '../firebase/firebaseApi';
 import { users } from '../common/fetchUser';
 
+const auth = getAuth(app);
 const gallery = document.querySelector('.gallery-container');
 
-gallery.addEventListener('click', onClick); // повесить слушателя на галерею
+onAuthStateChanged(auth, checkIsLogin);
 
-async function onClick(event) {
+function checkIsLogin(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+    gallery.removeEventListener('click', onLogOutClick);
+    gallery.addEventListener('click', onLogInClick); // повесить слушателя на галерею
+  } else {
+    gallery.removeEventListener('click', onLogInClick);
+    gallery.addEventListener('click', onLogOutClick); // повесить слушателя на галерею
+  }
+}
+
+async function onLogInClick(event) {
   //--------------------Favourites--------------------------------
 
   if (event.target.tagName === 'BUTTON') {
@@ -38,7 +53,7 @@ async function onClick(event) {
 
     if (!favouriteLinks) myResult = favouriteLinks;
     else myResult = favouriteLinks[newData.id];
-    console.log(myResult);
+
     refreshFavouritesStorage(myResult, newData);
   }
 
@@ -70,7 +85,14 @@ async function onClick(event) {
   }
 }
 
-//================================================
+function onLogOutClick(event) {
+  if (event.target.tagName === 'BUTTON') {
+    Report.info('Log in to add to favorites');
+  }
+  if (event.target.textContent === 'Read more') {
+    Report.info('Log in to add to read');
+  }
+}
 
 function refreshLinkStorage(myResult, newData) {
   if (!myResult) users.setData('readMore', newData.id, newData);
