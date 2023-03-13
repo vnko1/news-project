@@ -38,7 +38,7 @@ async function onClick(event) {
 
     if (!favouriteLinks) myResult = favouriteLinks;
     else myResult = favouriteLinks[newData.id];
-
+    console.log(myResult);
     refreshFavouritesStorage(myResult, newData);
   }
 

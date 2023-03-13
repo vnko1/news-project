@@ -1,6 +1,9 @@
+import { app } from '../firebase/firebaseApi';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { fetchNews } from './fetchNews';
 import { users } from './fetchUser';
 
+const auth = getAuth(app);
 const gallery = document.querySelector('.gallery-container');
 const modal = document.querySelector('.empty-page');
 const weather = document.querySelector('.weather-card');
@@ -139,7 +142,7 @@ function saveCategoryData(data) {
       url: el.url,
       img,
       imgDescr,
-      id: el.uri,
+      id: el.uri.replace('nyt://article/', ''),
     };
 
     pushData(obj);
@@ -222,63 +225,41 @@ function cutInfo(text) {
 }
 
 // Вставить функцию в блок then(), после функции которая рендерит разметку!!!
-async function addClassesForCoincidencesMarkupAndStorage() {
-  const favourite = await users.getAllData('favourites');
-  const labelsEl = document.querySelectorAll('.label-favorite');
-  const newArrOfBtn = [...labelsEl];
-  if (favourite) {
-    newArrOfBtn.filter(obj => {
-      if (favourite[obj.id]) {
-        obj.className = 'mybtn label-favorite js-favourite-storage';
-        obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
-      }
-    });
-  }
-
-  //-----------------------------------------
-
-  const readMore = await users.getAllData('readMore');
-  const linkEl = document.querySelectorAll('.news-card__more');
-  const newArrOfLinks = [...linkEl];
-
-  if (readMore) {
-    newArrOfLinks.filter(obj => {
-      if (readMore[obj.id]) {
-        obj.className = 'news-card__more js-read-more-storage';
-      }
-    });
-  }
+function addClassesForCoincidencesMarkupAndStorage() {
+  onAuthStateChanged(auth, checkIsLogin);
 }
 
-// async function addClassesForCoincidencesMarkupAndStorage() {
-//   // const favourite = await users.getAllData('favourites');
-//   const favouriteList = getStorageList('favourites');
-//   const labelsEl = document.querySelectorAll('.label-favorite');
-//   const newArrOfBtn = [...labelsEl];
+async function checkIsLogin(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+    const favourite = await users.getAllData('favourites');
+    const labelsEl = document.querySelectorAll('.label-favorite');
+    const newArrOfBtn = [...labelsEl];
+    if (favourite) {
+      newArrOfBtn.filter(obj => {
+        if (favourite[obj.id]) {
+          obj.className = 'mybtn label-favorite js-favourite-storage';
+          obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
+        }
+      });
+    }
 
-//   newArrOfBtn.filter(obj => {
-//     for (const objOfFavourite of favouriteList) {
-//       if (obj.id == objOfFavourite.id) {
-//         obj.className = 'mybtn label-favorite js-favourite-storage';
-//         obj.parentNode.firstElementChild.textContent = 'Remove from favorite';
-//       }
-//     }
-//   });
-//   //-----------------------------------------
-//   const readMoreList = getStorageList('read more');
+    //-----------------------------------------
 
-//   const linkEl = document.querySelectorAll('.news-card__more');
+    const readMore = await users.getAllData('readMore');
+    const linkEl = document.querySelectorAll('.news-card__more');
+    const newArrOfLinks = [...linkEl];
 
-//   const newArrOfLinks = [...linkEl];
-
-//   newArrOfLinks.filter(obj => {
-//     for (const objOfFavourite of readMoreList) {
-//       if (obj.id === objOfFavourite.id) {
-//         obj.className = 'news-card__more js-read-more-storage';
-//       }
-//     }
-//   });
-// }
+    if (readMore) {
+      newArrOfLinks.filter(obj => {
+        if (readMore[obj.id]) {
+          obj.className = 'news-card__more js-read-more-storage';
+        }
+      });
+    }
+  } else {
+  }
+}
 
 // функция для страниц fovorite и read more
 function addClassesForCoincidencesMarkupAndStoragePages() {

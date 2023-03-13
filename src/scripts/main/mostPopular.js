@@ -24,13 +24,15 @@ async function onLoad() {
     paginationByQuery();
     fetchNews.setNodeChild(document.querySelectorAll('.news-card'));
     fetchNews.setIsUrlRequest(true);
-    onAuthStateChanged(auth, checkLogin);
+    // onAuthStateChanged(auth, checkLogin);
+    addClassesForCoincidencesMarkupAndStorage();
   } catch (error) {
     console.log(error);
     spinner.stop();
   }
   spinner.stop();
 }
+
 async function checkLogin(user) {
   if (user) {
     users.updateProfile(user.displayName, user.email, user.uid);

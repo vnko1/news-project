@@ -1,6 +1,6 @@
 import { app } from './firebaseApi';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-// import { Report } from 'notiflix/build/notiflix-report-aio';
+
 import { users } from '../common/fetchUser';
 
 const userEl = document.querySelector('.user-name-header');
@@ -12,7 +12,6 @@ const signOutBtnMob = document.querySelector('.log-out-btn-mob');
 const auth = getAuth(app);
 
 onAuthStateChanged(auth, checkLogin);
-// console.log(users);
 
 async function checkLogin(user) {
   if (user) {
