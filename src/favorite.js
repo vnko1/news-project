@@ -8,4 +8,4 @@ import './scripts/favorite/favoriteBlock';
 import './scripts/common/newsCardFromStorage';
 import './scripts/favorite/themeFavorite';
 import './scripts/favorite/themeFavoriteMobile';
-// import './scripts/favorite/searchNewsfromFavoriteStorage';
+import './scripts/favorite/searchNewsfromFavoriteStorage';

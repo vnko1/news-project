@@ -284,7 +284,9 @@ async function checkIsLogin(user) {
   }
 }
 
-function showModal() {
+function showModal(message) {
+  const messageEl = document.querySelector('.empty-page__title');
+  messageEl.textContent = message;
   modal.classList.remove('is-hidden');
   gallery.innerHTML = '';
 }
@@ -305,6 +307,15 @@ function mainPageHideModal() {
   weather.classList.remove('is-hidden');
 }
 
+function createDataList(data) {
+  const dataList = [];
+  const keys = Object.keys(data);
+  for (const key of keys) {
+    dataList.push(data[key]);
+  }
+  return dataList;
+}
+
 export {
   cutInfo,
   formatDate,
@@ -320,5 +331,5 @@ export {
   mainPageHideModal,
   showModal,
   hideModal,
+  createDataList,
 };
-// ----------------

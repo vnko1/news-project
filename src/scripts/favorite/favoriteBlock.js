@@ -3,8 +3,12 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { spinner } from '../common/libraries';
 import { app } from '../firebase/firebaseApi';
 import { users } from '../common/fetchUser';
-import { addClassesForCoincidencesMarkupAndStoragePages } from '../common/commonFunctions';
-// import { renderEmptyPage } from '../common/emptyPage';
+import {
+  addClassesForCoincidencesMarkupAndStoragePages,
+  showModal,
+  hideModal,
+  createDataList,
+} from '../common/commonFunctions';
 
 const auth = getAuth(app);
 const gallery = document.querySelector('.gallery-container');
@@ -18,9 +22,8 @@ function checkIsLogin(user) {
     users.updateProfile(user.displayName, user.email, user.uid);
     onLoadFavoriteNews();
   } else {
-    const mess = 'Login to your account to see your favorite news!';
-    renderEmptyPage(gallery, mess);
-    gallery.innerHTML = '<p>Hello</p>';
+    const mess = 'Log in to your account to view their selected news!';
+    showModal(mess);
   }
 }
 
@@ -32,11 +35,12 @@ async function onLoadFavoriteNews() {
     if (!favourite) {
       spinner.stop();
       const mess = "Sorry! You haven't added anything to your favorites yet";
-      renderEmptyPage(gallery, mess);
+      showModal(mess);
       return;
     } else {
       const dataList = createDataList(favourite);
       renderFavouriteCardFromStorage(dataList);
+      hideModal();
       addClassesForCoincidencesMarkupAndStoragePages();
     }
   } catch (error) {
@@ -44,15 +48,6 @@ async function onLoadFavoriteNews() {
     spinner.stop();
   }
   spinner.stop();
-}
-
-function createDataList(data) {
-  const dataList = [];
-  const keys = Object.keys(data);
-  for (const key of keys) {
-    dataList.push(data[key]);
-  }
-  return dataList;
 }
 
 function renderFavouriteCardFromStorage(dataList) {
@@ -85,35 +80,20 @@ function renderFavouriteCardFromStorage(dataList) {
     </div>`;
     return acc;
   }, ``);
-
   gallery.insertAdjacentHTML('beforeend', markUp);
 }
 
 function onClickRemoveBtn(e) {
   if (e.target.tagName === 'BUTTON') {
-    e.target.parentNode.parentNode.parentNode.remove();
+    if (
+      !e.target.parentNode.parentNode.parentNode.classList.contains(
+        'found-news-card'
+      )
+    ) {
+      e.target.parentNode.parentNode.parentNode.remove();
+      if (!gallery.children.length) {
+        showModal("Sorry! You haven't added anything to your favorites yet");
+      }
+    }
   }
 }
-
-// function renderEmptyPage(el, message) {
-//   console.log(el);
-//   const markUp = `<div class="not-found-page">
-//     <h2 class="empty-page__title">${message}</h2>
-//     <picture>
-//         <source srcset="
-//             ${emptyPc1x} 1x,
-//             ${emptyPc2x} 2x
-//             " media="(min-width: 1170px)">
-//         <source srcset="
-//             ${emptyTab1x} 1x,
-//             ${emptyTab2x} 2x
-//             " media="(min-width: 768px)">
-//         <source srcset="
-//             ${emptyMob1x} 1x,
-//            ${emptyMob2x} 2x
-//             " media="(max-width: 767px)">
-//         <img src="/src/images/img/empty-news-mob-1x.png" alt="News not find" width="248">
-//     </picture>
-// </div>`;
-//   gallery.innerHtml = markUp;
-// }

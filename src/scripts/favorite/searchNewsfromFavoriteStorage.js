@@ -1,23 +1,32 @@
+import { spinner } from '../common/libraries';
 import {
-  getStorageList,
   showModal,
   hideModal,
   addClassesForCoincidencesMarkupAndStoragePages,
+  createDataList,
 } from '../common/commonFunctions';
+import { users } from '../common/fetchUser';
 
 const formEl = document.getElementById('search-form');
 const galleryEl = document.querySelector('.gallery-container');
 
 formEl.addEventListener('submit', onFormSubmit);
 
-function onFormSubmit(e) {
+async function onFormSubmit(e) {
   e.preventDefault();
   hideModal();
+  spinner.spin(document.body);
   const searchValue = e.target.elements.searchQuery.value;
 
-  const arr = getStorageList('favourites');
+  const data = await users.getAllData('favourites');
+  if (!data) {
+    showModal('Nothing was found matching your search!');
+    spinner.stop();
+    return;
+  }
+  const dataList = createDataList(data);
 
-  const newArrObj = arr.filter(
+  const newArrObj = dataList.filter(
     obj =>
       obj.descr.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
       obj.category.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
@@ -28,14 +37,15 @@ function onFormSubmit(e) {
     render(newArrObj);
     addClassesForCoincidencesMarkupAndStoragePages();
   } else {
-    showModal();
+    showModal('Nothing was found matching your search!');
   }
   formEl.reset();
+  spinner.stop();
 }
 
 function render(arr) {
   const markUp = arr.reduce((acc, el) => {
-    acc += `<div class="news-card" news-id="${el.id}">
+    acc += `<div class="news-card found-news-card" news-id="${el.id}">
       <div class="news-card__img">
         <p class="news-card__theme">${el.category}</p>
         <img
@@ -51,10 +61,8 @@ function render(arr) {
         }' class="mybtn label-favorite">Add to favorite</button>
         </div>
       </div>
-      <h2 class="news-card__info-title">${el.title.limit(50, {
-        ending: '',
-      })}</h2>
-      <p class="news-card__info-text">${el.descr.limit(120)}</p>
+      <h2 class="news-card__info-title">${el.title}</h2>
+      <p class="news-card__info-text">${el.descr}</p>
       <div class="news-card__additional">
         <p class="news-card__date">${el.dateArticle}</p>
         <a class="news-card__more" href="${el.link}" id="${
@@ -64,6 +72,6 @@ function render(arr) {
     </div>`;
     return acc;
   }, ``);
-  // console.log(markUp)
+
   galleryEl.innerHTML = markUp;
 }
