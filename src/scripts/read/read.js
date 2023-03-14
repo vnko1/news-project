@@ -1,32 +1,52 @@
-import { Report } from 'notiflix/build/notiflix-report-aio';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 import { spinner } from '../common/libraries';
-import { addClassesForCoincidencesMarkupAndStoragePages } from '../common/commonFunctions';
+import { app } from '../firebase/firebaseApi';
+import { users } from '../common/fetchUser';
+import {
+  addClassesForCoincidencesMarkupAndStoragePages,
+  showModal,
+  hideModal,
+  createDataList,
+} from '../common/commonFunctions';
 
+const auth = getAuth(app);
 const cardList = document.getElementById('ul-gallery');
-const spinnerContainer = document.querySelector('.spinner-container');
 
-onParse();
+onAuthStateChanged(auth, checkIsLogin);
 
-function onParse() {
+function checkIsLogin(user) {
+  if (user) {
+    users.updateProfile(user.displayName, user.email, user.uid);
+    onLoadReadNews();
+  } else {
+    const mess = 'Log in to your account to view your read news!';
+    showModal(mess);
+  }
+}
+
+async function onLoadReadNews() {
   spinner.spin(document.body);
   try {
-    const unparsed = localStorage.getItem('read more');
-    const parsed = JSON.parse(unparsed);
+    const readMore = await users.getAllData('readMore');
 
-    if (parsed === null) {
+    if (!readMore) {
       spinner.stop();
+      const mess = "Sorry! You haven't added anything to your read page yet";
+      showModal(mess);
       return;
-    } else if (parsed.length === 0) {
-      spinner.stop();
-      Report.info('There are no news You have read');
     } else {
-      renderMarkup(parsed);
-      spinner.stop();
+      const dataList = createDataList(readMore);
+      renderMarkup(dataList);
+      hideModal();
+      addClassesForCoincidencesMarkupAndStoragePages();
     }
   } catch (err) {
     console.error(err);
     spinner.stop();
   }
+
+  spinner.stop();
 }
 
 function renderMarkup(array) {
@@ -71,7 +91,6 @@ function renderMarkup(array) {
   }, []);
 
   //------- рендерим разметку по отсортированным уникальным датам---------
-  spinner.spin(spinnerContainer);
 
   for (let date of uniqueDates) {
     // --------------рендер заголовка с датой прочтения новостей-----------------
@@ -125,9 +144,8 @@ function renderMarkup(array) {
       });
     cardMarkup += cardMarkupLi + cardMarkupDiv.join('') + '</div></div></li>';
   }
-  cardList.innerHTML = cardMarkup;
-
-  spinner.stop();
+  cardList.insertAdjacentHTML('beforeend', cardMarkup);
+  // cardList.innerHTML = cardMarkup;
 
   // --проставляю всем контейнерам с новостями высоту по занимаемому контенту-------------------------
 
@@ -147,50 +165,3 @@ function renderMarkup(array) {
     })
   );
 }
-
-// ---замена дат в хранилище "read more" на случайные---
-
-// const clicker = document.querySelector('.clicker');
-// clicker.addEventListener('click', onClick);
-
-// function getRandomIntInclusive(min, max) {
-//   min = Math.ceil(min);
-//   max = Math.floor(max);
-//   return Math.floor(Math.random() * (max - min + 1)) + min;
-// }
-
-// function onClick() {
-//   try {
-//     const unparsed = localStorage.getItem('read more');
-//     const parsed = JSON.parse(unparsed);
-
-//     if (parsed === null) return;
-//     else if (parsed.length === 0)
-//       Report.info('There are no news You have read');
-//     else {
-//       const arrayChangedDates = parsed.reduce((acc, obj) => {
-//         const newObj = {};
-//         const i = getRandomIntInclusive(1, 9) * 86400000;
-
-//         newObj.date = obj.date - i;
-//         newObj.img = obj.img;
-//         newObj.descr = obj.descr;
-//         newObj.title = obj.title;
-//         newObj.link = obj.link;
-//         newObj.alt = obj.alt;
-//         newObj.category = obj.category;
-//         newObj.id = obj.id;
-//         newObj.dateArticle = obj.dateArticle;
-//         acc.push(newObj);
-//         // i += 1;
-//         return acc;
-//       }, []);
-
-//       renderMarkup(arrayChangedDates);
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// }
-
-addClassesForCoincidencesMarkupAndStoragePages();

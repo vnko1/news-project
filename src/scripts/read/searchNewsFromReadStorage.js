@@ -1,25 +1,32 @@
+import { spinner } from '../common/libraries';
 import {
-  getStorageList,
   showModal,
   hideModal,
   addClassesForCoincidencesMarkupAndStoragePages,
+  createDataList,
 } from '../common/commonFunctions';
+import { users } from '../common/fetchUser';
 
-// const inputEl = document.querySelector('.search-input');
 const formEl = document.getElementById('search-form');
-
 const galleryEl = document.querySelector('.gallery-container');
 
 formEl.addEventListener('submit', onFormSubmit);
 
-function onFormSubmit(e) {
+async function onFormSubmit(e) {
   e.preventDefault();
   hideModal();
+  spinner.spin(document.body);
   const searchValue = e.target.elements.searchQuery.value;
 
-  const arr = getStorageList('read more');
+  const data = await users.getAllData('readMore');
+  if (!data) {
+    showModal('Nothing was found matching your search!');
+    spinner.stop();
+    return;
+  }
 
-  const newArrObj = arr.filter(
+  const dataList = createDataList(data);
+  const newArrObj = dataList.filter(
     obj =>
       obj.descr.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
       obj.category.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
@@ -33,6 +40,7 @@ function onFormSubmit(e) {
     showModal();
   }
   formEl.reset();
+  spinner.stop();
 }
 
 function render(arr) {
