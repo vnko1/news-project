@@ -22,7 +22,7 @@ function checkIsLogin(user) {
     users.updateProfile(user.displayName, user.email, user.uid);
     onLoadFavoriteNews();
   } else {
-    const mess = 'Log in to your account to view their selected news!';
+    const mess = 'Log in to your account to view your selected news!';
     showModal(mess);
   }
 }
@@ -84,16 +84,18 @@ function renderFavouriteCardFromStorage(dataList) {
 }
 
 function onClickRemoveBtn(e) {
-  if (e.target.tagName === 'BUTTON') {
-    if (
-      !e.target.parentNode.parentNode.parentNode.classList.contains(
-        'found-news-card'
-      )
-    ) {
-      e.target.parentNode.parentNode.parentNode.remove();
-      if (!gallery.children.length) {
-        showModal("Sorry! You haven't added anything to your favorites yet");
+  setTimeout(() => {
+    if (e.target.tagName === 'BUTTON') {
+      if (
+        !e.target.parentNode.parentNode.parentNode.classList.contains(
+          'found-news-card'
+        )
+      ) {
+        e.target.parentNode.parentNode.parentNode.remove();
+        if (!gallery.children.length) {
+          showModal("Sorry! You haven't added anything to your favorites yet");
+        }
       }
     }
-  }
+  }, 500);
 }

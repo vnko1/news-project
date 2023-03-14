@@ -1,8 +1,11 @@
 import './scripts/common/current';
 import './scripts/common/mobileMenu';
 import './scripts/common/authMenu';
-import './scripts/common/newsCardFromStorage';
+import './scripts/firebase/authState';
+import './scripts/firebase/logIn';
+import './scripts/firebase/logOut';
 import './scripts/read/read';
+import './scripts/common/newsCardFromStorage';
 import './scripts/read/themeRead';
 import './scripts/read/themeReadMobile';
 import './scripts/read/searchNewsFromReadStorage';
