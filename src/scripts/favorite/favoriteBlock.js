@@ -89,18 +89,19 @@ function renderFavouriteCardFromStorage(dataList) {
 }
 
 function onClickRemoveBtn(e) {
-  setTimeout(() => {
-    if (e.target.tagName === 'BUTTON') {
-      if (
-        !e.target.parentNode.parentNode.parentNode.classList.contains(
-          'found-news-card'
-        )
-      ) {
+  if (e.target.tagName === 'BUTTON') {
+    if (
+      !e.target.parentNode.parentNode.parentNode.classList.contains(
+        'found-news-card'
+      )
+    ) {
+      setTimeout(() => {
         e.target.parentNode.parentNode.parentNode.remove();
-        if (!gallery.children.length) {
-          showModal("Sorry! You haven't added anything to your favorites yet");
-        }
+      }, 1000);
+
+      if (!gallery.children.length) {
+        showModal("Sorry! You haven't added anything to your favorites yet");
       }
     }
-  }, 500);
+  }
 }
