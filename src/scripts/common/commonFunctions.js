@@ -231,7 +231,12 @@ function addClassesForCoincidencesMarkupAndStorage() {
 
 async function checkIsLoginOnMain(user) {
   if (user) {
-    users.updateProfile(user.displayName, user.email, user.uid);
+    users.updateProfile(
+      user.displayName,
+      user.email,
+      user.uid,
+      user.accessToken
+    );
 
     const favourite = await users.getAllData('favourites');
     const labelsEl = document.querySelectorAll('.label-favorite');
@@ -267,7 +272,12 @@ function addClassesForCoincidencesMarkupAndStoragePages() {
 
 async function checkIsLogin(user) {
   if (user) {
-    users.updateProfile(user.displayName, user.email, user.uid);
+    users.updateProfile(
+      user.displayName,
+      user.email,
+      user.uid,
+      user.accessToken
+    );
 
     const favourite = await users.getAllData('favourites');
     const labelsEl = document.querySelectorAll('.label-favorite');
