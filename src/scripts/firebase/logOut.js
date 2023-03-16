@@ -1,7 +1,7 @@
 import { getAuth, signOut } from 'firebase/auth';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { app } from './firebaseApi';
-// import { users } from '../common/fetchUser';
+import { users } from '../common/fetchUser';
 
 const auth = getAuth(app);
 const signOutBtn = document.querySelector('.log-out-btn');
@@ -14,6 +14,7 @@ signOutBtnMob.addEventListener('click', onSignOutBtnCLick);
 async function onSignOutBtnCLick() {
   try {
     await signOut(auth);
+    users.resetUser();
     location.reload();
   } catch (error) {
     Report.failure(error);

@@ -94,9 +94,9 @@ function onLogOutClick(event) {
   if (event.target.tagName === 'BUTTON') {
     Report.info('Log in to add to favorites');
   }
-  if (event.target.textContent === 'Read more') {
-    Report.info('Log in to add to read');
-  }
+  // if (event.target.textContent === 'Read more') {
+  //   Report.info('Log in to add to read');
+  // }
 }
 
 function refreshLinkStorage(myResult, newData) {
