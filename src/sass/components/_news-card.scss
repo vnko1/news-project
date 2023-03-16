@@ -15,6 +15,10 @@
   @include desktop {
     max-width: 394px;
   }
+  transition: transform 400ms linear;
+  &.scale {
+    transform: scale(0);
+  }
 }
 .news-card__img {
   position: relative;

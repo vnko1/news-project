@@ -26,7 +26,12 @@ async function onAuthSubmit(e) {
     );
     const user = userCredential.user;
 
-    users.updateProfile(user.displayName, user.email, user.uid);
+    users.updateProfile(
+      user.displayName,
+      user.email,
+      user.uid,
+      user.accessToken
+    );
     changeVisual();
   } catch {
     Report.failure('This user is not registred');

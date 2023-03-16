@@ -5,9 +5,9 @@ const BASE_URL =
 
 class User {
   constructor() {
-    this.name = '';
-    this.email = '';
-    this.id = '';
+    this.name = null;
+    this.email = null;
+    this.id = null;
     this.token = null;
   }
 
@@ -50,9 +50,9 @@ class User {
   }
 
   resetUser() {
-    this.name = '';
-    this.email = '';
-    this.id = '';
+    this.name = null;
+    this.email = null;
+    this.id = null;
     this.token = null;
   }
 
