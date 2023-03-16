@@ -98,7 +98,7 @@ function onClickRemoveBtn(e) {
       e.target.parentNode.parentNode.parentNode.classList.add('scale');
       setTimeout(() => {
         e.target.parentNode.parentNode.parentNode.remove();
-      }, 260);
+      }, 600);
 
       if (!gallery.children.length) {
         showModal("Sorry! You haven't added anything to your favorites yet");

@@ -15,7 +15,7 @@
   @include desktop {
     max-width: 394px;
   }
-  transition: transform 250ms linear;
+  transition: transform 400ms linear;
   &.scale {
     transform: scale(0);
   }
