@@ -17,7 +17,12 @@ onAuthStateChanged(auth, checkIsLogin);
 
 function checkIsLogin(user) {
   if (user) {
-    users.updateProfile(user.displayName, user.email, user.uid);
+    users.updateProfile(
+      user.displayName,
+      user.email,
+      user.uid,
+      user.accessToken
+    );
     onLoadReadNews();
   } else {
     const mess = 'Log in to your account to view your read news!';

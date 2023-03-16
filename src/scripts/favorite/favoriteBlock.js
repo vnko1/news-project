@@ -19,7 +19,12 @@ onAuthStateChanged(auth, checkIsLogin);
 
 function checkIsLogin(user) {
   if (user) {
-    users.updateProfile(user.displayName, user.email, user.uid);
+    users.updateProfile(
+      user.displayName,
+      user.email,
+      user.uid,
+      user.accessToken
+    );
     onLoadFavoriteNews();
   } else {
     const mess = 'Log in to your account to view your selected news!';

@@ -8,6 +8,15 @@ class User {
     this.name = '';
     this.email = '';
     this.id = '';
+    this.token = null;
+  }
+
+  getToken() {
+    return this.token;
+  }
+
+  setToken(newToken) {
+    this.token = newToken;
   }
 
   getName() {
@@ -33,20 +42,23 @@ class User {
   setId(newId) {
     this.id = newId;
   }
-  updateProfile(newName, newEmail, newId) {
+  updateProfile(newName, newEmail, newId, newToken) {
     this.name = newName;
     this.email = newEmail;
     this.id = newId;
+    this.token = newToken;
   }
+
   resetUser() {
     this.name = '';
     this.email = '';
     this.id = '';
+    this.token = null;
   }
 
   async getAllData(typeOfData) {
     const { data } = await axios.get(
-      `${BASE_URL}/${this.getId()}/${typeOfData}.json`
+      `${BASE_URL}/${this.getId()}/${typeOfData}.json?auth=${this.getToken()}`
     );
 
     return data;
@@ -54,7 +66,7 @@ class User {
 
   async getData(typeOfData, id) {
     const { data } = await axios.get(
-      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json`
+      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`
     );
 
     return data;
@@ -62,13 +74,15 @@ class User {
 
   async setData(typeOfData, id, data) {
     await axios.put(
-      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json`,
+      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`,
       data
     );
   }
 
   async deleteData(typeOfData, id) {
-    await axios.delete(`${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json`);
+    await axios.delete(
+      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`
+    );
   }
 }
 

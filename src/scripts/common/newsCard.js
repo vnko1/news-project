@@ -10,7 +10,12 @@ onAuthStateChanged(auth, checkIsLogin);
 
 function checkIsLogin(user) {
   if (user) {
-    users.updateProfile(user.displayName, user.email, user.uid);
+    users.updateProfile(
+      user.displayName,
+      user.email,
+      user.uid,
+      user.accessToken
+    );
     gallery.removeEventListener('click', onLogOutClick);
     gallery.addEventListener('click', onLogInClick); // повесить слушателя на галерею
   } else {
