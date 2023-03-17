@@ -262,7 +262,6 @@ async function checkIsLoginOnMain(user) {
         }
       });
     }
-  } else {
   }
 }
 
@@ -290,19 +289,6 @@ async function checkIsLogin(user) {
         }
       });
     }
-
-    const readMore = await users.getAllData('readMore');
-    const linkEl = document.querySelectorAll('.news-card__more');
-    const newArrOfLinks = [...linkEl];
-
-    if (readMore) {
-      newArrOfLinks.filter(obj => {
-        if (readMore[obj.id]) {
-          obj.className = 'news-card__more js-read-more-storage';
-        }
-      });
-    }
-  } else {
   }
 }
 
