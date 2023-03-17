@@ -101,7 +101,7 @@ function onLogOutClick(event) {
 
 function refreshLinkStorage(myResult, newData) {
   if (!myResult) users.setData('readMore', newData.id, newData);
-  else users.deleteData('readMore', newData.id);
+  else return;
 }
 
 function refreshFavouritesStorage(myResult, newData) {

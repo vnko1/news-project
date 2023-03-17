@@ -262,7 +262,6 @@ async function checkIsLoginOnMain(user) {
         }
       });
     }
-  } else {
   }
 }
 
@@ -290,7 +289,6 @@ async function checkIsLogin(user) {
         }
       });
     }
-  } else {
   }
 }
 

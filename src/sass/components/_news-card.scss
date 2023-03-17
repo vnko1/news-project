@@ -17,7 +17,7 @@
   }
   transition: transform 400ms linear;
   &.scale {
-    transform: scale(0);
+    transform: scale(0) rotate(360deg);
   }
 }
 .news-card__img {
@@ -95,7 +95,13 @@
   line-height: 1.38;
 
   color: $secondary-text-color;
+
+  &:hover,
+  &:focus {
+    color: gray;
+  }
 }
+
 .label-favorite {
   position: relative;
   display: flex;
