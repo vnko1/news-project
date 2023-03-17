@@ -16,7 +16,7 @@ function onHandleSubmit(e) {
   e.preventDefault();
   spinner.spin(document.body);
   const { name, email, password } = e.target.elements;
-  creatAccount(name.value, email.value, password.value);
+  creatAccount(name.value, email.value.trim(), password.value.trim());
 }
 
 async function creatAccount(name, email, password) {
