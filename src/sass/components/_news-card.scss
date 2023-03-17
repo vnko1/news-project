@@ -95,7 +95,13 @@
   line-height: 1.38;
 
   color: $secondary-text-color;
+
+  &:hover,
+  &:focus {
+    color: gray;
+  }
 }
+
 .label-favorite {
   position: relative;
   display: flex;

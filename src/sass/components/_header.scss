@@ -58,6 +58,11 @@
     font-size: 18px;
     line-height: 1.39;
   }
+
+  &:hover,
+  &:focus {
+    color: gray;
+  }
 }
 
 .change-theme {
