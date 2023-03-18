@@ -30,14 +30,17 @@ async function onClick(event) {
       link: arrayChildren.children[3].children[1].href,
       category: arrayChildren.children[0].children[0].textContent,
     };
+    try {
+      const favouriteLinks = await users.getAllData('favourites');
+      let myResult = null;
 
-    const favouriteLinks = await users.getAllData('favourites');
-    let myResult = null;
+      if (!favouriteLinks) myResult = favouriteLinks;
+      else myResult = favouriteLinks[newData.id];
 
-    if (!favouriteLinks) myResult = favouriteLinks;
-    else myResult = favouriteLinks[newData.id];
-
-    refreshFavouritesStorage(myResult, newData);
+      refreshFavouritesStorage(myResult, newData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //--------------------Read more--------------------------------
@@ -58,13 +61,16 @@ async function onClick(event) {
       link: arrayChildren.children[3].children[1].href,
       category: arrayChildren.children[0].children[0].textContent,
     };
+    try {
+      const readMoreList = await users.getAllData('readMore');
+      let myResult = null;
+      if (!readMoreList) myResult = readMoreList;
+      else myResult = readMoreList[newData.id];
 
-    const readMoreList = await users.getAllData('readMore');
-    let myResult = null;
-    if (!readMoreList) myResult = readMoreList;
-    else myResult = readMoreList[newData.id];
-
-    refreshLinkStorage(myResult, newData);
+      refreshLinkStorage(myResult, newData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
@@ -77,6 +83,7 @@ function refreshFavouritesStorage(myResult, newData) {
   if (!myResult) users.setData('favourites', newData.id, newData);
   else users.deleteData('favourites', newData.id);
 }
+
 function getDateForCreateObjToStorage() {
   const date = new Date();
 

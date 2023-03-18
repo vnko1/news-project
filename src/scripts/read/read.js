@@ -1,5 +1,4 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
 import { spinner } from '../common/libraries';
 import { app } from '../firebase/firebaseApi';
 import { users } from '../common/fetchUser';
@@ -8,10 +7,13 @@ import {
   showModal,
   hideModal,
   createDataList,
+  onFormMessage,
 } from '../common/commonFunctions';
+import { onFormSubmit } from './searchNewsFromReadStorage';
 
 const auth = getAuth(app);
 const cardList = document.getElementById('ul-gallery');
+const formEl = document.getElementById('search-form');
 
 onAuthStateChanged(auth, checkIsLogin);
 
@@ -24,9 +26,11 @@ function checkIsLogin(user) {
       user.accessToken
     );
     onLoadReadNews();
+    formEl.addEventListener('submit', onFormSubmit);
   } else {
     const mess = 'Log in to your account to view your read news!';
     showModal(mess);
+    formEl.addEventListener('submit', onFormMessage);
   }
 }
 

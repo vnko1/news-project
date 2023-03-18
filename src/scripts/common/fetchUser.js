@@ -73,16 +73,24 @@ class User {
   }
 
   async setData(typeOfData, id, data) {
-    await axios.put(
-      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`,
-      data
-    );
+    try {
+      await axios.put(
+        `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`,
+        data
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async deleteData(typeOfData, id) {
-    await axios.delete(
-      `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`
-    );
+    try {
+      await axios.delete(
+        `${BASE_URL}/${this.getId()}/${typeOfData}/${id}.json?auth=${this.getToken()}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

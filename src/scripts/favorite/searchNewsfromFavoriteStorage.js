@@ -7,38 +7,42 @@ import {
 } from '../common/commonFunctions';
 import { users } from '../common/fetchUser';
 
-const formEl = document.getElementById('search-form');
 const galleryEl = document.querySelector('.gallery-container');
+const formEl = document.getElementById('search-form');
 
-formEl.addEventListener('submit', onFormSubmit);
-
-async function onFormSubmit(e) {
+export async function onFormSubmit(e) {
   e.preventDefault();
   hideModal();
   spinner.spin(document.body);
   const searchValue = e.target.elements.searchQuery.value;
 
-  const data = await users.getAllData('favourites');
-  if (!data) {
-    showModal('Nothing was found matching your search!');
+  try {
+    const data = await users.getAllData('favourites');
+    if (!data) {
+      showModal('Nothing was found matching your search!');
+      spinner.stop();
+      return;
+    }
+    const dataList = createDataList(data);
+
+    const newArrObj = dataList.filter(
+      obj =>
+        obj.descr.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
+        obj.category.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
+        obj.title.toLowerCase().includes(searchValue.toLowerCase().trim())
+    );
+
+    if (newArrObj.length > 0) {
+      render(newArrObj);
+      addClassesForCoincidencesMarkupAndStoragePages();
+    } else {
+      showModal('Nothing was found matching your search!');
+    }
+  } catch (error) {
+    console.log(error);
     spinner.stop();
-    return;
   }
-  const dataList = createDataList(data);
 
-  const newArrObj = dataList.filter(
-    obj =>
-      obj.descr.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
-      obj.category.toLowerCase().includes(searchValue.toLowerCase().trim()) ||
-      obj.title.toLowerCase().includes(searchValue.toLowerCase().trim())
-  );
-
-  if (newArrObj.length > 0) {
-    render(newArrObj);
-    addClassesForCoincidencesMarkupAndStoragePages();
-  } else {
-    showModal('Nothing was found matching your search!');
-  }
   formEl.reset();
   spinner.stop();
 }

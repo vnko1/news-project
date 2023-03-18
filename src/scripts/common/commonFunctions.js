@@ -1,3 +1,4 @@
+import { Report } from 'notiflix';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from '../firebase/firebaseApi';
 import { fetchNews } from './fetchNews';
@@ -324,6 +325,13 @@ function createDataList(data) {
   return dataList;
 }
 
+function onFormMessage(e) {
+  e.preventDefault();
+  const searchValue = e.target.elements.searchQuery.value;
+
+  Report.info(`Log in to search "${searchValue}"!`);
+}
+
 export {
   cutInfo,
   formatDate,
@@ -340,4 +348,5 @@ export {
   showModal,
   hideModal,
   createDataList,
+  onFormMessage,
 };

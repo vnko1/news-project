@@ -1,5 +1,4 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
 import { spinner } from '../common/libraries';
 import { app } from '../firebase/firebaseApi';
 import { users } from '../common/fetchUser';
@@ -8,10 +7,13 @@ import {
   showModal,
   hideModal,
   createDataList,
+  onFormMessage,
 } from '../common/commonFunctions';
+import { onFormSubmit } from './searchNewsfromFavoriteStorage';
 
 const auth = getAuth(app);
 const gallery = document.querySelector('.gallery-container');
+const formEl = document.getElementById('search-form');
 
 gallery.addEventListener('click', onClickRemoveBtn);
 
@@ -26,9 +28,11 @@ function checkIsLogin(user) {
       user.accessToken
     );
     onLoadFavoriteNews();
+    formEl.addEventListener('submit', onFormSubmit);
   } else {
     const mess = 'Log in to your account to view your selected news!';
     showModal(mess);
+    formEl.addEventListener('submit', onFormMessage);
   }
 }
 
