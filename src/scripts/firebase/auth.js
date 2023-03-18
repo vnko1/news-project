@@ -14,10 +14,35 @@ regForm.addEventListener('submit', onHandleSubmit);
 
 function onHandleSubmit(e) {
   e.preventDefault();
-  spinner.spin(document.body);
-  const { name, email, password } = e.target.elements;
 
-  creatAccount(name.value, email.value.trim(), password.value.trim());
+  const { name, email, password, repeatedPassword } = e.target.elements;
+
+  const passwordValue = password.value;
+  const rPasswordValue = repeatedPassword.value;
+  if (passwordValue !== rPasswordValue) {
+    regForm.reset();
+    Report.failure('You entered different passwords!');
+    return;
+  }
+  const beginWithoutDigit = /^\D.*$/;
+  const withoutSpecialChars = /^[^-() /]*$/;
+  const containsLetters = /^.*[a-zA-Z]+.*$/;
+
+  if (
+    passwordValue.length < 7 ||
+    !beginWithoutDigit.test(passwordValue) ||
+    !withoutSpecialChars.test(passwordValue) ||
+    !containsLetters.test(passwordValue)
+  ) {
+    regForm.reset();
+    Report.failure(
+      'Your password must be at least 7 characters long, and should contain letters!'
+    );
+    return;
+  }
+
+  spinner.spin(document.body);
+  creatAccount(name.value, email.value.trim(), passwordValue);
 }
 
 async function creatAccount(name, email, password) {
@@ -25,6 +50,7 @@ async function creatAccount(name, email, password) {
     await createUserWithEmailAndPassword(auth, email, password);
     const params = { displayName: name };
     await updateProfile(auth.currentUser, params);
+    regForm.reset();
     spinner.stop();
 
     window.location.href = './index.html';
@@ -38,6 +64,6 @@ async function creatAccount(name, email, password) {
 
   // .then(userCredential => {
   //   const userData = userCredential.user;
-  //   regForm.reset();
+  //
   // })
 }
