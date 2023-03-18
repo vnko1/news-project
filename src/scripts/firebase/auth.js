@@ -20,7 +20,8 @@ function onHandleSubmit(e) {
   const passwordValue = password.value;
   const rPasswordValue = repeatedPassword.value;
   if (passwordValue !== rPasswordValue) {
-    regForm.reset();
+    password.value = '';
+    repeatedPassword.value = '';
     Report.failure('You entered different passwords!');
     return;
   }
@@ -34,7 +35,8 @@ function onHandleSubmit(e) {
     !withoutSpecialChars.test(passwordValue) ||
     !containsLetters.test(passwordValue)
   ) {
-    regForm.reset();
+    password.value = '';
+    repeatedPassword.value = '';
     Report.failure(
       'Your password must be at least 7 characters long, and should contain letters!'
     );
