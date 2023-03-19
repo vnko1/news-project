@@ -17,8 +17,8 @@ function onHandleSubmit(e) {
 
   const { name, email, password, repeatedPassword } = e.target.elements;
 
-  const passwordValue = password.value;
-  const rPasswordValue = repeatedPassword.value;
+  const passwordValue = password.value.trim();
+  const rPasswordValue = repeatedPassword.value.trim();
   if (passwordValue !== rPasswordValue) {
     password.value = '';
     repeatedPassword.value = '';
@@ -44,7 +44,7 @@ function onHandleSubmit(e) {
   }
 
   spinner.spin(document.body);
-  creatAccount(name.value, email.value.trim(), passwordValue);
+  creatAccount(name.value.trim(), email.value.trim(), passwordValue);
 }
 
 async function creatAccount(name, email, password) {
