@@ -7,7 +7,7 @@
   padding: 0;
   cursor: pointer;
   border: none;
-  border-radius: 50%;
+  // border-radius: 50%;
   outline: none;
   background: none;
 
@@ -17,7 +17,8 @@
 
   &:hover,
   &:focus {
-    background-color: gray;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
+      rgb(209, 213, 219) 0px 0px 0px 1px inset;
   }
 }
 
@@ -70,7 +71,8 @@
   padding: 6px 0;
   padding-left: 16px;
   padding-right: 16px;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: $hover-bg-color;
     .menu-bar__icon-arrow {
       fill: $alt-border-color;
