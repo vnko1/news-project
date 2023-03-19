@@ -152,7 +152,7 @@
   transition: 0.4s;
   width: 100%;
   padding: 5px 5px 5px 48px;
-  scale: 0;
+  // scale: 0;
   transition: scale $duration $cubic;
 
   font-family: 'Poppins', sans-serif;
@@ -161,9 +161,9 @@
   letter-spacing: 0.02em;
   color: $primary-text-color;
   opacity: 0.4;
-  &:focus {
-    scale: 1;
-  }
+  // &:focus {
+  //   scale: 1;
+  // }
   &:focus + .query-btn {
     transform: translateX(-60px);
     @include tablet {
