@@ -28,10 +28,12 @@ function checkIsLogin(user) {
       user.accessToken
     );
     onLoadFavoriteNews();
+    formEl.removeEventListener('submit', onFormMessage);
     formEl.addEventListener('submit', onFormSubmit);
   } else {
     const mess = 'Log in to your account to view your selected news!';
     showModal(mess);
+    formEl.removeEventListener('submit', onFormSubmit);
     formEl.addEventListener('submit', onFormMessage);
   }
 }

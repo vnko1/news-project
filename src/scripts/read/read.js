@@ -26,10 +26,12 @@ function checkIsLogin(user) {
       user.accessToken
     );
     onLoadReadNews();
+    formEl.removeEventListener('submit', onFormMessage);
     formEl.addEventListener('submit', onFormSubmit);
   } else {
     const mess = 'Log in to your account to view your read news!';
     showModal(mess);
+    formEl.removeEventListener('submit', onFormSubmit);
     formEl.addEventListener('submit', onFormMessage);
   }
 }
