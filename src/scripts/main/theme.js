@@ -8,7 +8,6 @@ const refs = {
   searchInput: document.querySelector('.search-input'),
   queryBtn: document.querySelector('.query-btn-icon'),
   inputCalendar: document.querySelector('.input-calendar'),
-  auth: document.querySelector('.auth-modal'),
 };
 // перевірка локального сходице на наявність теми
 const savedTheme = localStorage.getItem('theme');
@@ -42,6 +41,7 @@ refs.checkbox.addEventListener('change', function () {
   refs.queryBtn.classList.toggle('dark-theme-site');
   refs.mobileMenu.classList.toggle('dark-theme-site');
   refs.inputCalendar.classList.toggle('dark-theme-site');
+
   changeThemeMobile();
 });
 
