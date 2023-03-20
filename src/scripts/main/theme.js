@@ -41,6 +41,7 @@ refs.checkbox.addEventListener('change', function () {
   refs.queryBtn.classList.toggle('dark-theme-site');
   refs.mobileMenu.classList.toggle('dark-theme-site');
   refs.inputCalendar.classList.toggle('dark-theme-site');
+
   changeThemeMobile();
 });
 
