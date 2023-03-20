@@ -8,6 +8,7 @@ const refs = {
   searchInput: document.querySelector('.search-input'),
   queryBtn: document.querySelector('.query-btn-icon'),
   inputCalendar: document.querySelector('.input-calendar'),
+  auth: document.querySelector('.auth-modal'),
 };
 // перевірка локального сходице на наявність теми
 const savedTheme = localStorage.getItem('theme');
