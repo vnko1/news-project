@@ -5,8 +5,8 @@ import { app } from './firebaseApi';
 
 const auth = getAuth(app);
 const authForm = document.querySelector('.auth-form');
-const userEl = document.querySelector('.user-name-header');
-const userMobEl = document.querySelector('.user-name-mobile');
+const userEl = document.querySelector('.user-tab-pc');
+const userMobEl = document.querySelector('.user-mob');
 const signInBtn = document.querySelector('.sign-in-btn');
 const signInBtnMob = document.querySelector('.sign-in-btn-mob');
 const signOutBtn = document.querySelector('.log-out-btn');
@@ -19,32 +19,28 @@ async function onAuthSubmit(e) {
   e.preventDefault();
   const { email, password } = e.target.elements;
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email.value,
-      password.value
-    );
-    const user = userCredential.user;
+    await signInWithEmailAndPassword(auth, email.value, password.value);
+    // const user = userCredential.user;
 
-    users.updateProfile(
-      user.displayName,
-      user.email,
-      user.uid,
-      user.accessToken
-    );
+    // users.updateProfile(
+    //   user.displayName,
+    //   user.email,
+    //   user.uid,
+    //   user.accessToken
+    // );
     changeVisual();
-  } catch {
-    Report.failure('This user is not registred');
+  } catch (error) {
+    Report.failure(`${error}! 'This user is not registred'`);
   }
 }
 
 function changeVisual() {
-  userEl.textContent = users.getName();
-  userMobEl.textContent = users.getName();
-  signInBtn.disabled = 'true';
-  signInBtnMob.disabled = 'true';
-  signOutBtn.removeAttribute('disabled');
-  signOutBtnMob.removeAttribute('disabled');
+  // userEl.textContent = `Hello, ${users.getName()}!`;
+  // userMobEl.textContent = `Hello, ${users.getName()}!`;
+  // signInBtn.disabled = 'true';
+  // signInBtnMob.disabled = 'true';
+  // signOutBtn.removeAttribute('disabled');
+  // signOutBtnMob.removeAttribute('disabled');
   authMenu.classList.add('is-hidden');
   document.body.classList.remove('modal-is-open');
 }

@@ -14,7 +14,7 @@ signOutBtnMob.addEventListener('click', onSignOutBtnCLick);
 async function onSignOutBtnCLick() {
   try {
     await signOut(auth);
-    users.resetUser();
+    // users.resetUser();
     location.reload();
   } catch (error) {
     Report.failure(error);
