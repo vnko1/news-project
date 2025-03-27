@@ -1,0 +1,10 @@
+.wrapper {
+  @apply ml-1-xs flex gap-1-xs;
+}
+
+.btn {
+  @apply text-xs;
+}
+.img {
+  @apply rounded-[20px];
+}

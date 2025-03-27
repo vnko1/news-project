@@ -1,0 +1,33 @@
+.layout {
+  @apply w-full max-w-full mx-auto px-1-lg tab:max-w-[768px] desc:max-w-[1280px];
+}
+
+.visually-hidden {
+  @apply absolute w-[1px] h-[1px] overflow-hidden border-0 p-0 -m-[1px] whitespace-nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.no-scroll {
+  @apply overflow-hidden;
+}
+
+.cards {
+  &-container {
+    @apply flex flex-col items-center gap-2-xs tab:grid tab:grid-cols-[354px_354px] tab:gap-3-xs tab:justify-center desc:grid-cols-[396px_396px_396px] desc:gap-3-sm;
+  }
+
+  &-item {
+    &__weather {
+      @apply tab:-order-1 desc:-order-1;
+    }
+  }
+
+  &-pagination {
+    @apply tab:col-span-2 desc:col-span-3;
+  }
+
+  &-not-found {
+    @apply tab:col-span-2 desc:col-span-3;
+  }
+}
